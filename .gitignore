@@ -1,0 +1,40 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Logs
+*.log
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Playwright
+playwright-report/
+test-results/
+screenshots/
+
+# Allure
+allure-results/
+allure-report/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Backup files
+*~

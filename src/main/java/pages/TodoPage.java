@@ -16,7 +16,7 @@ public class TodoPage {
     }
 
     public void addTask(String task) {
-        page.locator(".new-todo").type(task);
+        page.locator(".new-todo").fill(task); // Cambié type por fill (mejor práctica)
         page.locator(".new-todo").press("Enter");
     }
 

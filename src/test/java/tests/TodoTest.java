@@ -5,9 +5,7 @@ import pages.TodoPage;
 import org.junit.jupiter.api.*;
 import io.qameta.allure.Description;
 import io.qameta.allure.Attachment;
-
 import java.nio.file.Paths;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TodoTest {
@@ -19,9 +17,7 @@ public class TodoTest {
     @BeforeAll
     static void setup() {
         playwright = Playwright.create();
-        browser = playwright.chromium().launch(
-            new BrowserType.LaunchOptions().setHeadless(false) // headed: abre la ventana
-        );
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
     }
 
     @BeforeEach
@@ -40,12 +36,11 @@ public class TodoTest {
     }
 
     @Test
-    @Description("Valida la creación de dos tareas consecutivas en TodoMVC")
+    @Description("Valida la creación de dos tareas consecutivas")
     void agregarDosTareas() {
         todoPage.navigate();
         todoPage.addTask("Primera tarea");
         todoPage.addTask("Segunda tarea");
-
         assertEquals("Primera tarea", todoPage.getTaskByIndex(0));
         assertEquals("Segunda tarea", todoPage.getTaskByIndex(1));
         attachScreenshot("agregarDosTareas");
@@ -56,28 +51,31 @@ public class TodoTest {
     void eliminarTarea() {
         todoPage.navigate();
         todoPage.addTask("Tarea a eliminar");
+        
+        // Verificamos que se agregó
+        assertEquals(1, page.locator(".todo-list li").count());
+        
         todoPage.deleteTask(0);
-
+        
+        // Verificamos que se eliminó (debe haber 0)
         assertEquals(0, page.locator(".todo-list li").count());
         attachScreenshot("eliminarTarea");
     }
 
-    @Attachment(value = "Screenshot {0}", type = "image/png")
+    @Attachment(value = "Screenshot: {0}", type = "image/png")
     byte[] attachScreenshot(String name) {
-        return page.screenshot(new Page.ScreenshotOptions()
-            .setPath(Paths.get("target/screenshots/" + name + ".png")));
+        // Allure necesita que el método retorne el array de bytes para adjuntarlo al reporte
+        return page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
     }
 
     @AfterEach
     void closePage() {
-        if (page != null && !page.isClosed()) {
-            page.close();
-        }
+        if (page != null) page.close();
     }
 
     @AfterAll
     static void teardown() {
-        browser.close();
-        playwright.close();
+        if (browser != null) browser.close();
+        if (playwright != null) playwright.close();
     }
 }
